@@ -44,7 +44,7 @@ class WebSocketHandler {
 
     /**
      * @param {string} type tipo da mensagem
-     * @param {() => string | object | any[]} message conteudo da mensagem em si
+     * @param {(string | object | any[]) => any} message conteudo da mensagem em si
      */
     on(type, handler) {
         if (this.status === "CONECTADO") {
