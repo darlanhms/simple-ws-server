@@ -4,18 +4,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     await webSocket.connect();
 
-    webSocket.send("customMessage", {
-        message: 123
-    })
-
-    webSocket.on('customMessage', (data) => {
-        console.log(data);
-    })
-
-    webSocket.on('trigger', data => {
-        console.log('trigger', data);
-    })
-
     document.getElementById("sendMessage").addEventListener("click", () => {
         const message = document.getElementById("message").value
 
