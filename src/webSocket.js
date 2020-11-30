@@ -35,6 +35,12 @@ const WebSocketServer = new WebSocket.Server({ port: 8080 });
 
 const initServer = () => {
   WebSocketServer.on('connection', ws => {
+    ws.isAlive = true;
+
+    ws.on('pong', function() {
+      this.isAlive = true;
+    });
+  
     ws.on("message", stringfiedMessage => {
       try {
         const { type: messageType, message } = JSON.parse(stringfiedMessage)
@@ -45,6 +51,19 @@ const initServer = () => {
         }
       } catch (err) {}
     })
+  });
+
+  const checkConnectionInterval = setInterval(() => {
+    WebSocketServer.clients.forEach(function each(ws) {
+      if (ws.isAlive === false) return ws.terminate();
+  
+      ws.isAlive = false;
+      ws.ping("isAlive");
+    });
+  }, 15000);
+  
+  WebSocketServer.on('close', function close() {
+    clearInterval(checkConnectionInterval);
   });
 }
 
