@@ -5,6 +5,10 @@ const app = express();
 
 webSocket.start();
 
+webSocket.on("messageEntry", message => {
+    console.log(message);
+})
+
 app.use(express.static("src/static"))
 
 app.listen(3333, () => {
