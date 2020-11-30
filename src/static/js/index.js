@@ -1,14 +1,24 @@
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const webScoket =  new WebSocketHandler(`ws://${window.location.hostname}:8080`);
+    const webSocket =  new WebSocketHandler(`ws://${window.location.hostname}:8080`);
 
-    await webScoket.connect();
+    await webSocket.connect();
 
-    webScoket.send("customMessage", {
+    webSocket.send("customMessage", {
         message: 123
     })
 
-    webScoket.on('customMessage', (data) => {
+    webSocket.on('customMessage', (data) => {
         console.log(data);
+    })
+
+    webSocket.on('trigger', data => {
+        console.log('trigger', data);
+    })
+
+    document.getElementById("sendMessage").addEventListener("click", () => {
+        const message = document.getElementById("message").value
+
+        webSocket.send("messageInside", message)
     })
 })
