@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     await webScoket.connect();
 
     webScoket.send("customMessage", {
-        userId: 'uuid'
+        message: 123
     })
 
     webScoket.on('customMessage', (data) => {

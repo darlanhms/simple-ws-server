@@ -1,8 +1,9 @@
 const express = require('express');
+const webSocket = require("./webSocket");
 
 const server = express();
 
-require('./webSocket')();
+webSocket.start();
 
 server.use(express.static("src/static"))
 
