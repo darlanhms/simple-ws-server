@@ -66,8 +66,6 @@ const initServer = () => {
         return ws.terminate();
       }
 
-      console.log(ws.userId);
-
       ws.isAlive = false;
       ws.ping("isAlive");
     });
@@ -90,7 +88,7 @@ const initServer = () => {
       })
     }
 
-    previousCheckedClients = WebSocketServer.clients;
+    previousCheckedClients = new Set(WebSocketServer.clients);
   }, 5000);
   
   WebSocketServer.on('close', function close() {
