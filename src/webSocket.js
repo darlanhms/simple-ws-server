@@ -7,6 +7,8 @@ const WebSocket = require("ws");
  * }>}
  */
 const typeHandlers = [];
+/** @type {Set<WebSocket>} */
+let previousCheckedClients = new Set();
 
 /**
  * recebe mensagens do cliente no type definido
@@ -63,10 +65,32 @@ const initServer = () => {
         WebSocketServer.emit("disconnection", ws)
         return ws.terminate();
       }
-      
+
+      console.log(ws.userId);
+
       ws.isAlive = false;
       ws.ping("isAlive");
     });
+
+    if (previousCheckedClients && previousCheckedClients.size) {
+      previousCheckedClients.forEach(ws => {
+        if (ws.userId) {
+          let existentClient = false;
+
+          WebSocketServer.clients.forEach(ws2 => {
+            if (ws2.userId === ws.userId) {
+              existentClient = true;
+            }
+          });
+
+          if (!existentClient) {
+            WebSocketServer.emit("disconnection", ws)
+          }
+        }
+      })
+    }
+
+    previousCheckedClients = WebSocketServer.clients;
   }, 5000);
   
   WebSocketServer.on('close', function close() {
