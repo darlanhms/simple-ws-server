@@ -8,13 +8,14 @@ var WebSocketHandler = {
         this.connect();
     },
     
-
     async connect() {
         return new Promise((resolve, reject) => {
             this.webSocket = new WebSocket(this.url);
     
             this.webSocket.onopen = () => {
                 resolve();
+
+                this.send("login", { userId: 123123 })
             }
 
             this.webSocket.onerror = () => {
