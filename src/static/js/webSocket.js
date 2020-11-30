@@ -1,13 +1,13 @@
 
-class WebSocketHandler {
-    url = "";
+var WebSocketHandler = {
+    url: "",
     /** @type {WebSocket} */
-    webSocket;
-
-    constructor(url) {
+    webSocket: null,
+    init(url) {
         this.url = url;
         this.connect();
-    }
+    },
+    
 
     async connect() {
         return new Promise((resolve, reject) => {
@@ -22,7 +22,7 @@ class WebSocketHandler {
             }
         })
         
-    }
+    },
 
     /**
      * @param {string} type tipo da mensagem
@@ -38,7 +38,7 @@ class WebSocketHandler {
             await this.connect();
             this.send(type, message)
         }
-    }
+    },
 
     /**
      * @param {string} type tipo da mensagem
@@ -52,7 +52,7 @@ class WebSocketHandler {
                 handler(dataObject.message);
             }
         };
-    }
+    },
 
     /**
      *  0	CONNECTING	Socket has been created. The connection is not yet open.

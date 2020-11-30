@@ -46,6 +46,10 @@ const initServer = () => {
         const { type: messageType, message } = JSON.parse(stringfiedMessage)
         const allHandlers = typeHandlers.filter(h => h.type === messageType);
 
+        if (messageType === "login" && message && typeof message === "object" && message.userId) {
+          ws.userId = message.userId
+        }
+
         if (allHandlers && allHandlers.length) {
           allHandlers.forEach(({ handler }) => handler(message))
         }
@@ -55,12 +59,15 @@ const initServer = () => {
 
   const checkConnectionInterval = setInterval(() => {
     WebSocketServer.clients.forEach(function each(ws) {
-      if (ws.isAlive === false) return ws.terminate();
-  
+      if (ws.isAlive === false) {
+        WebSocketServer.emit("disconnection", ws)
+        return ws.terminate();
+      }
+      
       ws.isAlive = false;
       ws.ping("isAlive");
     });
-  }, 15000);
+  }, 5000);
   
   WebSocketServer.on('close', function close() {
     clearInterval(checkConnectionInterval);
