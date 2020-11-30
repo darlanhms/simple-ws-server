@@ -63,7 +63,7 @@ class WebSocketHandler {
      * @returns {boolean}
      */
     checkConnection() {
-        if (this.webSocket.readyState === 1) {
+        if (this.webSocket && this.webSocket.readyState === 1) {
             return true;
         }
 
