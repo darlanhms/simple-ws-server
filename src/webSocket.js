@@ -33,9 +33,9 @@ const send = (type, message) => {
   })
 }
 
-const WebSocketServer = new WebSocket.Server({ port: 8080 });
+const WebSocketServer = new WebSocket.Server({ noServer: true  });
 
-const initServer = () => {
+const initServer = (httpServer) => {
   WebSocketServer.on('connection', ws => {
     ws.isAlive = true;
 
@@ -93,6 +93,12 @@ const initServer = () => {
   
   WebSocketServer.on('close', function close() {
     clearInterval(checkConnectionInterval);
+  });
+
+  httpServer.on('upgrade', (request, socket, head) => {
+    WebSocketServer.handleUpgrade(request, socket, head, socket => {
+      WebSocketServer.emit('connection', socket, request);
+    });
   });
 }
 
